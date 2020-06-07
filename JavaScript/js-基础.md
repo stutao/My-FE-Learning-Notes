@@ -1,15 +1,172 @@
+严格模式 use strict 建议声明在作用域内 不要生命在全局
+
 ## 数据类型
 
 ### 基本数据类型
 
 * 1,数字 Number -- 常见的数值
 * 2,字符串 String  --所有带引号的
+
+~~~ js
+// 字符串创建方式 object对象是复合数据类型
+var str = new String("hello")
+var str = String("hello")
+var str = "hello" // 单引号双引号都是可以的
+// 方法length 返回长度-字符个数
+// 访问字符串方法
+str.charAt(下标) //返回对应的值 
+str[下标]
+// 字符串是不可变的 
+
+str.charCodeAt(下标) //返回对应下标字符的ASCII码
+String.fromCharCode(ASCII值) //返回ASCII对应的字符
+str1.concat(str2) // 连接字符串 返回拼接结果不改变原来结果 一般用+就行了
+// 字符串查找方法
+str.indexOf(子串,开始查找的位置); //返回值,第一次子串出现的位置的下标.没查到返回-1
+str.lastIndexOf(子串) //返回值是子串在字符串中最后一次出现的位置 没有返回-1
+
+search(regx)// 参数是正则 i忽略大小写,g全局匹配
+
+str.replace(匹配的字符串/正则,替换的新的字符串) //返回的是新的字符串 使用字符串的话只会替换 第一个 想要全部规则都匹配 需要使用正则.并且要使用g全局
+
+str.substring(strat,end) // 获取指定范围内的字符 生成新的字符串 左开右闭
+
+str.split(分割符,生成的数组长度) //返回值 通过分隔符返回的子串数组 后面那个长度等于是表示我只要分割出来的几个值这样.基本和Python差别不大.如果分割符是空字符串 会将结果切分为单个字符组成的数组
+
+str.toLowerCase() // 改成全小写
+str.toUpperCase() // 改成全大写
+~~~
+
+
+
 * 3,布尔 boolean --true  false
 * 4,特殊数据类型 null undefined
 
 ### 复合数据类型
 
+#### 数组
 
+* 表示一组数据的集合 和python的list差不多意思
+
+~~~js
+// 数组的定义方式
+var arr = new Array(1,true,"hello")
+var arr = new Array(10) // 长度为10的数组
+var arr = [1,2,3,4,"hello"]  // 这么和Python的list一样了
+
+
+// 数组的访问方式 使用下标 从0开始.
+// arr[0]
+// 数组长度  arr.length() 不是只读 是可以进行设置的
+// var arr = [1,2,3] arr.length=3
+// arr.length =2 这样 arr的输出就会变成1,2  变成长度为2
+
+// 遍历数组 使用循环 
+// 普通的for循环和java一样意思
+// 关键看for...in的使用
+/*
+for(var 变量 in 数组){
+	代码块
+}
+// 这里的i是下标
+for (var i in arr){
+	document.write(arr[i])
+}
+*/
+~~~
+
+* 数组的操作方法
+
+~~~ js
+// 栈方法 LIFO
+// push 将结果添加到arr的最后  返回的是push之后的数组长度
+var arr = [1,2,3,4]
+var res = arr.push(7,8,9,10)
+
+
+// pop方法 删除数组最后一个元素 返回值是弹出的数值
+var res = arr.pop()
+
+
+// 队列方法 FIFO
+arr.push(value) // 数组尾部插入元素 返回值是修改后数组的长度
+arr.shift() // 弹出头部元素 返回值是弹出的值
+arr.unshift(value...) // 从数组的头部插入元素,参数随意 返回值是数组的长度 
+
+//concat 数组的合并
+arr.concat(arr2) // 合并数组 不会改变原数组 返回合并后数组
+
+// slice 切片
+arr.slice(start,end) // 取指定区域内的元素(左闭右开), 返回新数组 原数组不会改变
+
+// splice 可以完成删除 插入 替换等操作
+// 参数1:截取的开始下标,
+// 参数2:截取的长度
+// 参数3:在截取的开始下标位置,我们要插入的元素,插入的元素个数随意
+// 会对原数组进行做修改.
+var arr = [1,2,3,4,5,6]
+// 删除功能
+var res = arr.splice(0,2) // 意思是从0 操作删除长度2 即结果arr=[3,4,5,6] 返回值为删除掉的数据构成的数组 当前为 1,2
+
+// 插入功能
+var res = arr.splice(0,0,"11","2233") // 在0的位置插入后面传入的多个参数或一个 无返回值
+
+// 替换功能 先删除 在插入
+var res = arr.splice(1,1,"11") // 将位置1的参数替换成"11"
+
+// join 方法 使用拼接符将数组中的元素拼接成字符串
+var res = arr.join() // 返回值是拼接好的字符串 和python的一个意思
+
+
+// 数组排序
+//  arr.reverse() 逆向排序
+// arr.sort() 升序排序--默认按照字符串进行排序
+// 一般情况下需要自己编写排序方法,为满足自己的个性需求???
+// 常用排序 就是后端那几个排序  只是换成js写法
+
+indexOf(元素,开始查找的位置) // 和字符串类似
+
+arr.forEach(function(item,index,array){
+   // item 当前元素
+   // index 当前下标
+   // array 当前遍历的数组
+}) // 数组遍历
+
+map // 遍历->操作->返回
+var newArr = arr.map(function(item,index,array){
+    return item+2
+}) // 给每个元素加2
+
+reduce // 归并
+var res = arr.reduce(function(pre,next,index,array){
+    // pre 上一次遍历return后面的值
+    // next 当前遍历的值
+    return pre + next
+}) // 数组元素相加
+
+
+filter // 过滤
+var newArr = arr.reduce(function(pre,next,index,array){
+    return item >30
+}) // 返回符合条件的元素组成的数组
+
+some // 某些 判断return后面的条件是否成立 成立返回true 否则 false
+var res = arr.some(function(pre,next,index,array){
+    return item == 30 //返回条件 当前数组中是否存在满足条件的元素 如果有存在的元素 res为true 否则false
+    // 当碰到满足条件的遍历将不再继续 直接返回
+}) 
+
+
+every // 使用方式和some一样 要求是必须所有都符合条件
+var res = arr.every(function(pre,next,index,array){
+    return item >5 // 必须要每个元素都大于5才会返回true 否则就false
+    // 当碰到不满足条件的元素遍历将不再继续 直接返回
+}) 
+~~~
+
+* 数组是引用类型 主体注意事项和python列表的差不多 在局部作用域中操作数组,也可能会改变数组原来的值
+
+ 
 
 ## 变量 
 
@@ -260,7 +417,30 @@ function num(){
 
 #### 递归
 
-* 后端类似内容
+* 后端类似内容 自己加强
+
+
+
+## Math对象
+
+ 用来执行数学任务
+
+常用函数
+
+~~~js
+Math.round() // 四舍五入
+random() //0-1 之间的随机数
+max() min()// 最大 最小
+abs() //绝对值
+ceil() //天花板数 向上取整
+floor() //地板数 向下取整
+pow(x,y) // 幂函数x^y
+sqrt() // 开方
+
+// 三角函数大家庭 sin() cos() tab()  ...等等
+// 参数都应该是弧度 借用Math.PI=180弧度
+
+~~~
 
 
 
