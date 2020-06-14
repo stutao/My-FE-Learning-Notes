@@ -495,9 +495,95 @@ var res = prompt();// 弹出一个带有输入的提示框,
 // 参数1:要在提示框显示的内容,参数2:输入框内的默认值 返回值是輸入的内容
 ~~~
 
+* 方法open
 
+* ~~~js
+  open()
+  /*
+  参数
+  1,要加载的url
+  2,窗口的名称或者窗口的目标
+  3,一串有特殊意义的字符串
+  */
+  window.onload = function(){
+      var oBtn = document.getElementById("btn");
+      oBtn.onclick = function(){
+          // 只有一个参数,调用会加载新窗口,打开url
+          open("http://www.baidu.com")
+          
+          // 加入参数2 给打开的窗口起名 以后再通过这个入口加载就不会打开新的了
+          open("http://www.baidu.com","baidu")
+          
+          // 加入参数3 子窗口的一些属性
+          open("http://www.baidu.com","baidu","width=xxx,"")
+      }
+  }
+  
+  // 使用open打开之后 子窗口有会有一个opener对象,获取到的是父窗口的window对象.注意IE不支持该对象
+  ~~~
 
- 
+### location对象
 
+~~~js
+// 可以看做是浏览器上地址栏的输入框
+/*
+属性
+url 统一资源定位符 例如快递地址
+*/
+location.hash // 锚点 #后的部分--主要实现页内跳转 可以直接进行设置
+location.hostname // 主机名 
+location.href //整个url 
+location.pathName // 存放数据的路径 
+location.pathName //端口号
+location.protocal // 协议
+location.search // 查询字符串 ?后面的东西
 
+// 方法
+location.assign() // 跳转到指定的URL 有退后按钮
+location.reload() // 重载当前的URL 如果传参为true 强制加载无-无缓存加载
+location.replace() // 用新的url替换当前的页面 是没有退后按钮的
+~~~
+
+### history对象
+
+~~~js
+/*
+history 是window对象的属性 保存用户上网的记录 在浏览器上就是后退前进那里
+*/
+// 属性
+history.length  // 返回当前history对象条数,
+
+// 方法
+.back(); //上一条
+.forword(); // 下一条
+.go() ; // 参数 0 重新加载当前页面 参数为正数n 前进n条记录 为负数n 后退n条
+~~~
+
+## DOM对象
+
+document object model 文档对象类型
+
+dom是打通html,css和js的一个工具
+
+~~~js
+// 节点种类有三种
+/*
+<div title="属性节点">测试Div</div>
+元素节点:div
+属性节点 title
+文本节点 测试Div
+*/
+
+var Div = document.getElementById(id)
+Div.tagName // 获取元素节点的标签名
+Div.innerHTML // 获取元素节点标签间的内容
+// 还包括HTML属性
+// id  className title style 访问方式元素节点.属性名 或元素节点[属性名]
+
+// 访问'-'链接的样式 如background-color 访问方式
+// 元素节点.style.(backgroundColor)
+
+var Div = document.getElementById(id)
+
+~~~
 
