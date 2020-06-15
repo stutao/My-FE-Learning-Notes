@@ -583,7 +583,91 @@ Div.innerHTML // 获取元素节点标签间的内容
 // 访问'-'链接的样式 如background-color 访问方式
 // 元素节点.style.(backgroundColor)
 
-var Div = document.getElementById(id)
+var Div = document.getElementsByTagName('标签name')
+// 返回符合条件的一个数组  类型objetc.HTML.collection
 
+// 支持从某个节点去查
+var ul1 = document.getElementById('ul1')
+ul1.getElementsByTagName("li")
+
+// byName 可以获取name属性相同的节点. 不支持从某个节点去查
+var Div = document.getElementsByTagName('标签中的name的值')
+
+// byClassName 通过class的name获取节点对象 支持从节点查询 在低版本的浏览器不支持的.
+var Div = document.getElementsByClassName('className')
+
+// 获取当前CSS有效样式 因为css有优先级
+// 使用style.的方式只能找到行内样式
+// 解决方法 使用getComputedStyle(元素节点)[获取的样式类型]
+// 不支持IE
+var Div = document.getElementsByClassName('className')
+getComputedStyle(Div)["width"]
+// 兼容操作 采用三目运算的方式
+function (elem,attr){
+    return elem.currStyle ? elem.currStyle[attr]:
+    getComputedStyle(elem)[attr]
+}
+~~~
+
+### Attribute系列方法
+
+~~~js
+// set/getAttribute()
+// removeAttribute()
+var oDiv = document.getElementsById("id")
+// 获取
+oDiv.title
+oDiv.getAttribute('title')
+// 设置
+oDiv.title = 'xxx'
+oDiv.setAttribute('title','xxx')
+
+// 区别
+oDiv.getAttribute('class') //直接通过class获取,set也一样
+// . 的方式是采用className
+
+// set/getAttribute() 可以设置和获取用户自定义属性 如果xxx,yyy等的非默认属性
+
+// .是不能删除属性的 而remove是可以直接删除掉属性的.
+~~~
+
+### DOM节点属性
+
+~~~
+节点可以分为元素节点,属性节点和文本节点,而这些节点又有三个非常有用的属性,分别为:nodeName,nodelType和nodeValue
+
+document.getElementsById('id').nodeType
+
+节点类型  nodeName  nodeType  nodeValue
+元素      元素名称     1        null
+属性		属性名称	 2		  属性值
+文本		#text	    3		文本内容(不含HTML)
+~~~
+
+
+
+### 元素节点属性
+
+~~~js
+// .childNodes获取当前元素节点的所有子节点.算上了缩进???
+// 获取到的结果包括文本节点和属性节点
+
+// firstChild 子节点首个 lastChild 子节点的末位
+
+// 有层级结构的 怎么去除空白节点?
+// 正则 /^\s+$/.test() 如果是空白节点返回true,否则false
+
+// 删除空白节点
+function removeSpaceNode(nodes){
+    var result = [];
+    for(var i = 0;i<nodes.length;i++){
+    	if (nodes[i].nodeTypes
+        == 3 && /^\s+$/.test(nodes[i].nodeValue)){
+            continue;
+        }
+        result.push()
+    }
+    return result
+}
 ~~~
 
