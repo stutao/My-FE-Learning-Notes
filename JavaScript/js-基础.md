@@ -671,3 +671,215 @@ function removeSpaceNode(nodes){
 }
 ~~~
 
+ownerDocument  返回当前文档的document对象 基本不用
+
+~~~js
+parentNode //当前节点的父节点
+previouSibling // 当前节点的同一级节点
+nextSibling // 当前节点的后一个同级节点
+
+attributes // 返回属性节点的属性集合-不重复,无序的
+/* 访问其中一个?
+attributes.getNameItem("属性")
+或者[]的方式
+
+取到属性节点对象后可以采用nodeName,nodeValue,nodeType访问内容
+*/
+~~~
+
+### 节点操作
+
+~~~js
+// 创建元素节点 createElement
+var node = document.createElement('span') //创建节点
+var oText = document.createText('内容') //创建文本
+node.appendChild(oText) // 给节点插入内容
+oDiv.appendChild(node) // 将节点插入到节点树中
+
+父节点.insertBefore(插入的节点,旧节点) // 将节点插入到旧节点之前
+// 并没有提供插入到某个节点之后的方法,可以自己封装
+
+/*
+步骤:
+	1,创建节点 node
+	2,找到当前节点 oSpan
+	3,使用当前节点的父节点.insertBefore(node,oSpan)
+*/
+
+
+父节点.replaceChild(newNode,oldNode) //将oldNode替换成newNode
+
+节点.cloneNode(true or false) // 返回新的克隆出来的节点
+// true复制元素节点中的文本内容,false反之,默认false
+
+父节点.removeChild(node) // 删除当前节点node
+~~~
+
+## 事件Event
+
+### 事件方法
+
+~~~js
+/*
+	写法:
+		var node = getElementByxx('xx')
+		node.事件方法 = function(){
+			需要执行的逻辑
+		}
+*/
+
+// 单击事件 onclick 和mousedown的区别,后者只是按下去,前者包括鼠标抬起.click会在mousedown和mouseup执行完之后执行
+
+// 鼠标 onmouseover划入 xxout 划出 
+// onsubmit 是给整个form表单添加事件 return false 是阻止默认行为
+
+// onfocus 和onblur
+// oninput 在输入的时候
+
+// onkeypress  按下字符键时触发
+// onkeydown   按下任意键时触发
+
+~~~
+
+### 事件对象
+
+~~~js
+/*
+	当触发某个事件的时候,会自动产生一个事件对象--event对象
+*/
+// e就是事件对象 e是形参
+oDiv.onclick = function(e){
+    console.log(e);
+    // 低版本IE采用window.event()获取 window可以省略
+}
+// e.clientX e.clientY --与可视区域的间距X,Y
+// e.pageX pageY --与整个页面大小的间距X,Y
+// offsetX,offsetY --相对事件源的间距X,Y
+
+// e.altKey ctrlKey shiftKey 获取到的是一个bool值
+
+//判断是否按下某个键 可以采用e.keyCode
+~~~
+
+### 事件流
+
+~~~js
+// 三个阶段 捕获,目标,冒泡
+// 例子 outer div 包裹内inner div 点击inner 同时父元素也是有事件执行的
+// 阻止冒泡的方式,event.cancelBubble=true;或 event.stopPropagation();
+~~~
+
+### 事件委托
+
+~~~js
+//利用事件冒泡的原理,将子节点的动作委托给父级(外层)
+
+// js 部分代码 场景是给列表追加新元素li 让新的元素也具备点击事件
+// 将本该添加在li上的事件函数 添加到父级 UL上
+oUl.onlcik = function(e){
+    var evt = e || event;
+    var _target = evt.target || evt.srcElement;
+    
+    if (_target.nodeName.toUpperCase()=="LI"){
+        console.log(this.innerHTML)
+    }
+}
+~~~
+
+### 事件默认行为
+
+~~~js
+// 比如说a标签跳转,submit的提交等
+// 有的时候需要阻止默认行为.采用的方式如下三种方式都可以.
+event.preverntDefault(); event.returnValue=false; return false
+~~~
+
+### DOM2级事件
+
+~~~js
+// 添加事件监听器 addEventListener(事件名,处理函数,布尔值--代表是冒泡还是捕获)
+// 移除事件监听器 removeEventListener(事件名,处理函数)
+// outer 是外层div inner 是内层DIV
+/*
+	和普通outer.onclik事件区别:
+	1,普通方式对同一个节点添加同一个点击事件,后面的会覆盖前面的,DOM2级事件会同时触发
+	2,移除方式不一样 普通方式只要赋值为null 而DOM2级需要使用remove的方式.而且需要将当前节点添加的所有时间同时删除.否则会报错.
+*/
+outer.addEventListener("click",bar =function(){},false)
+outer.addEventListener("click",foo = function(){},false)
+outer.removeEventListener('click',bar)
+outer.removeEventListener('click',foo)
+
+// IE下的事件监听器 注意的是事件名需要加 ON
+attachEvet(事件名,处理函数) // 注意这里IE默认只支持冒泡的方式
+detachEvent(事件名,处理函数)
+
+// 可以写一个兼容的函数
+~~~
+
+## Cookie
+
+HTTP协议 超文本传输协议,运行在应用层,无状态协议.
+
+~~~js
+// 同名cookie会覆盖
+// 获取
+document.cookie // 可以获取到cookie
+// 设置 默认是关闭浏览器就自动消失
+document.cookie = "username=honey"; // 设置cookie 格式:name=value
+// 设置有效期 三天后过期
+var oDate = new Date();
+oDate.setDate(oData.getDate()+3)
+document.cookie = "username=honey;expires="+oDate;
+// 删除 将expires的值设置为当前值之前.
+
+// 可以将方法设置为公共方法
+~~~
+
+## 正则表达式
+
+~~~js
+// 定义方式
+var reg = /规则/;
+var reg = new RegExp("规则");
+
+var str = "abcdefg"
+// 正则方法test 符合规则为true 否则为false
+reg.test(str)
+// exec方法 将匹配成功的放入数组,否则为null
+// 需要再次往后匹配的话要重新调用
+reg.exec(str)
+reg.exec(str)
+
+// 修饰符 g i 
+// g 全局匹配 如 /abc/g 
+// i 忽略大小写
+
+// 查看字符串中有多少个符合匹配规则 使用字符串方法match
+str.match(reg)
+// search 查找符合规则子串的位置,只返回第一个位置.
+str.search(reg)
+// split 按照某种规则分割
+str.split(reg)
+// replace 替换
+str.replace(reg,newStr)
+
+
+// 正则的规则 都差不多 就不记录了吧.
+// 记录一下分组操作 使用$+位置获取参数 下面是一个交换的操作
+var reg = /(.*)\s(.*)/
+var str = "taobao baidu"
+str.replace(req,"$2 $1")
+
+~~~
+
+
+
+
+
+
+
+
+
+
+
