@@ -873,6 +873,115 @@ str.replace(req,"$2 $1")
 
 ~~~
 
+## ES6
+
+### let的使用
+
+~~~js
+// 类似于var 但是声明的变量只能在当前代码块可以使用 和局部变量有点差别 是通过块来区别
+if(xxx){
+	let b
+}
+console.log(b) // 无法输出 未定义
+
+// 不存在声明提升
+// 不能重复定义同名变量
+// const的使用 是用来声明常量 注意这个声明的值就不允许修改了
+
+~~~
+
+### 解构赋值
+
+~~~js
+// 类似于python的元组解包
+let [a,b,c] = [1,2,3]
+
+// 输出 a=2 b=undefined
+let [a=3,b] = [2]
+
+// 如果赋值一个undefined的 会使用默认值
+let c;
+let [a=3] = [c]
+
+let {a,b} = {a:111,b:222} //a=111,b=222
+let {a:b} = {a:111} // b =111
+
+let {a,b=4} = {a:1} // 输出a=1,b=4
+~~~
+
+### 模板字符串
+
+~~~js
+let obj = {"name":"john","age":20}
+let {name,age} = obj;
+console.log(`${name}的年龄是${age}`) // 就是字符串的格式化
+~~~
+
+### 箭头函数
+
+~~~js
+// 1,只含有一个表达式
+// ES5写法
+
+var foo = function(){
+    return 1;
+}
+
+// ES6写法
+let foo = (a) => a;
+
+// 2,多个表达式
+let foo = (a) =>{
+    let b = 10;
+    return a+b;
+}
+
+// 3,this指向问题
+// 指向定义时候所在的作用域,不是执行时的作用域
+~~~
+
+### set结构
+
+~~~js
+// 集合 
+var s = new Set([1,2,2,3,4,5]) // {1,2,3,4,5}
+var arr = [...s] // [1,2,3,4,5]
+// for of 遍历
+for (let i of s){ 
+    i// 是其中的元素
+}
+
+// 方法
+set.size //长度
+.add()
+.delete()
+.has()
+.clear()
+
+.keys() // 键
+.values()// 值
+.entries()// 键值对
+.forEach()// 使用回调函数遍历每个成员
+set.forEach((items,key)==>console.log(key*2))
+~~~
+
+### map结构
+
+~~~js
+let map = new Map(["name","john"],["age",20])
+// 设置
+map.set(key,value)
+.get
+.has
+.clear
+
+.keys() // 键
+.values()// 值
+.entries()// 键值对
+.forEach()// 使用回调函数遍历每个成员
+set.forEach((items,key)==>console.log(key*2))
+~~~
+
 
 
 
