@@ -982,6 +982,71 @@ map.set(key,value)
 set.forEach((items,key)==>console.log(key*2))
 ~~~
 
+### 生成器函数(gennerator)
+
+~~~js
+// 定义方式 function* 函数名 和python的yield差不多的样子.
+function* foo(x){
+	yield x+1
+    yield x+2
+    return x+3
+}
+var f =foo(1)
+// 调用
+f.next()
+// next(参数) 参数表示上一次函数的返回值
+
+// fib 前N项
+
+function* fib(n){
+    let a = 0;
+    let b = 1;
+    for (let i=0;i<n;i++){
+        yield a;
+        let temp = a + b;
+        a = b;
+        b = temp
+    }
+}
+
+var f = fib(5);
+
+for (let i of f){
+    console.log(i)
+}
+
+~~~
+
+### Class--了解
+
+~~~js
+// 结构
+Class Person{
+    // 构造器
+    constructor(name){
+        this.name = name;
+    }
+    // 方法
+    sayHello(){
+        console.log(this.name);
+    }
+}
+
+var person = new Person("john");
+person.sayHello()
+~~~
+
+## JS_animation-原生动画
+
+~~~js
+// 主要原理就是修改当前元素标签的边距那些,需要注意的是当前标签的CSS中的position的设置
+
+// 碰撞检测  左边left <0 右边 left > 页面宽度-标签宽度 垂直方向同理
+
+
+// 块和块之间相撞的检测 当两个块中心店在水平和垂直方向上的距离 同时小于两个块的高度和的一半和宽度和的一半
+~~~
+
 
 
 
