@@ -1017,25 +1017,6 @@ for (let i of f){
 
 ~~~
 
-### Class--了解
-
-~~~js
-// 结构
-Class Person{
-    // 构造器
-    constructor(name){
-        this.name = name;
-    }
-    // 方法
-    sayHello(){
-        console.log(this.name);
-    }
-}
-
-var person = new Person("john");
-person.sayHello()
-~~~
-
 ## JS_animation-原生动画
 
 ~~~js
@@ -1049,11 +1030,423 @@ person.sayHello()
 
 
 
+## JS面向对象--类
+
+~~~js
+// 结构
+Class Person{
+    // 构造器
+    constructor(name){
+        this.name = name;
+    }
+    // 方法
+    sayHello(){ b 
+        console.log(this.name);
+    }
+}
+
+var person = new Person("john");
+person.sayHello()
+~~~
+
+### 构造函数和继承
+
+~~~js
+//主要关注this的指向问题
+function Person(name,age) {
+    this.name = name;
+    this.age = age;
+}
+
+funtion Student(name,age,id){
+    /*
+    	Person(name,age)
+    	个人理解:因为当前Person是在doucument下创建的,当调用它的时候,this的指向也随之成为了doucument
+    	要让this指向为当前作用域 使用apply或者call方法
+    	Person.apply(this,[name,age])
+    	Person.call(this,name,age)
+    */
+    
+}
+~~~
+
+### 原型链和继承
+
+~~~js
+// 主要是属性的寻址顺序和prototype还有__proto__
+/*
+	new 一个对象的过程
+	1, 创建对象
+	2, 将this指向这个对象
+	3, 执行构造函数
+	4,返回这个对象
+    var p = new Person()
+    p.name;  // 属性寻找方式,当前类,如果没有去找他的prototype对象,还没有就继续网上
+	show code
+*/
+
+function Person(){
+    
+}
+
+Person.prototype.name = "tom";
+Person.prototype.age = 1;
+Person.prototype.sqyHello = function (){
+    alert(this.name)
+}
+
+
+// 新建一个Sstudent的函数
+function Student(){
+    
+}
+// 使用Object的方法创建了一个空的临时对象,这个对象中啥都没有只有一个
+// __proto__属性指向与Person的prototype属性
+Student.prototype = Object.create(Person.prototype)
+
+var s =new Student()
+s.sayHello();//可以正常输出
+// 如果调用一个不存在的方法或者属性 会再网上走到object 他的__proto__指向的是一个null值
+
+// 具体如下图所示
+~~~
+
+![原型链继承示意图](../prototype_.jpg)
+
+## Ajax
+
+### 使用方式
+
+~~~js
+// 核心对象XMLHttpRequest
+
+//1,创建ajax对象
+//2,打开这个对象
+//3,打开这个请求
+//4,监听请求
+
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+    // xhr对象的readystate发生了改变的,这个事件就会触发
+    //状态如下
+    //0,---xhr对象已经创建,但未进行初始化操作.
+    //1,---xhr对象已经调用了open
+    //2,---xhr已经发出ajax请求
+    //3,--- 已经返回了部分数据
+    //4,--- 数据已经全部返回
+    
+    // 重点关注的是状态4
+    if (xhr.readystate !== 4){
+        return;
+    }
+    // 判断响应码在200-300之间
+    if (xhr.status >=200 &&xhr.status <=300){
+        // 返回的数据放在了xhr.responseText中
+        // 使用JSON.parse可以将字符串转为json
+        var res = JSON.parse(xhr.responseText)
+        // 将js独享转为JSON格式
+        JSON.stringify(js-obj)
+    }
+}
+
+xhr.open("method","url".true); // 第三个参数代表是否异步请求
+// 发送post请求需要设置请求头 当前已表单格式发送
+xhr.setRequestHeader("Content-Type","application/x-www-for-urlencoded")
+// 发送表单格式数据
+xhr.send("user=gap&pass=123456");
+~~~
+
+### 回调地狱&Promise
+
+~~~js
+// 就是使用一个请求的返回数据再去请求,就会有很多层回调函数
+
+// ES6提出的解决方式 Promise
+
+// Promise创建的对象有3个状态,pending,fulfill,reject
+// 伪代码如下
+var promise = new Promise(function(resolve,reject){
+    if(/*成功*/){
+    	resolve()   
+    }else{
+        reject()
+    }
+})
+
+// 场景代码 2秒钟随机一个数 如果是偶数 执行resolve,奇数执行reject
+
+var promise = new Promise(function(resolve,rehject){
+    var num = Math.floor(Math.random()*100);
+    if (num % 2 == 0){
+        resolve(num)
+    }else{
+        reject(num)
+    }
+})
+// 那么我们如何知道这个是否执行成功并按照对应结果执行后续操作呢?如下
+promise.then(function(num){
+    // 成功后需要执行的代码
+    console.log('resolve'+ num)
+}).catch(function(){
+    // reject之后执行的代码
+})
+~~~
+
+### Ajax同源策略-如何解决跨域问题?
+
+~~~js
+/*
+	1,JSONP
+	2，CORS
+*/
+
+// JSONP,前后端都要参与,主要实现思路
+/*
+	前端ajax请求一个允许的地址,指定一个本地script中存在的一个处理函数
+	已一种类似于调用的方式传递 如getData({"name":"xxx","age":xxx})
+	如百度搜索关键字请求的网址.
+	
+	然后在前端部分将当前返回的内容写入当前DOM树的script中 表示调用这个函数,执行其中的逻辑,代码看下方的图
+*/
+
+// CORS主要是后端解决
+/*
+	在后端返回数据的时候在响应头中添加Access-Control-Allow-Origin:'接受的域名' 
+	前端还是一样的请求方式 没变化
+*/
+~~~
+
+* JSONP跨域
+
+![JSONP解决跨域问题](../JSONP跨域.jpg)
+
+# 设计模式
+
+## 单例模式 
+
+某个类的对象只有一个
+
+~~~js
+function Singleton() {
+    if (!Singleton._instance){
+        Singleton._instance = {
+            "xxx":uu,
+            ....
+        }
+    }else{
+        return Singleton._instance;
+    }
+}
+~~~
+
+## 工厂模式
+
+~~~js
+function Factory(){
+    
+}
+
+Factory.create = function(type){
+    switch(type){
+        case 'BMW':
+            return new BMW();
+            break;
+        case 'Audi':
+            return new Audi();
+            break;
+    }
+}
+~~~
+
+## 策略模式
+
+~~~js
+// 根据传入的对象不同,执行对应的代码??? 感觉像是多态的样子?不懂了
+~~~
+
+## 适配器模式
+
+~~~js
+// 就是转接头的意思?
+// 应用场景 旧系统和新系统的接口不一致的时候.使用这个模式
+~~~
+
+## 观察者模式
+
+~~~js
+// 个人理解就是代码的重用??
+// 案例是LOL的战报,每个英雄都要收到,那么英雄类和消息类直接就有一个注册的关系,将英雄的实例注册到msg中去,在msg消息发送之后,会通知到每个英雄.
+// 这也是门动态语言.大体上感觉和python差不多呢
+~~~
 
 
 
+# ESM - AMD
+
+## require.js
+
+~~~js
+// 首先在页面引入require.js 并定义一个属性data-main="入门js文件位置"
+
+// 在mian.js中执行主要逻辑  当前案例请求s.js
+require(["./s.js"],function (s) {
+    alert(s.s_circle(10));
+})
+
+// s.js 又引用了math.js文件 定义如下
+// 第一个参数代表需要引入的文件位置,第二是回调函数,函数的参数和前方的引入模块需要一一对应
+define(["./math"],function (m1) {
+    function circle(r) {
+        // 调用了math的方法 
+        return m1.mutiple(m1.PI,m1.square(r))
+    }
+    return {
+        // 键值对 value的值是函数名字或者属性 注意不要调用
+        s_circle:circle
+    }
+})
+
+// math.js 如下 独立模块没有依赖,直接回调
+define(function () {
+    var PI = 3.14;
+    
+    function mutiple(num1,num2) {
+        return num1*num2
+    }
+    
+    function square (n) {
+        return n*n
+    }
+    // 返回对象
+    return {
+        PI:PI,
+        mutiple:mutiple,
+        square:square
+    }
+})	
+~~~
+
+## CommonJS & Webpack
+
+~~~js
+// math.js
+var PI = 3.14;
+
+function mutiple(num1,num2) {
+    return num1*num2;
+}
+
+function square (n) {
+    return n*n
+}
+// 返回对象为了在模块外调用 使用module.exports
+module.exports = {
+        PI:PI,
+        mutiple:mutiple,
+        square:square
+}
+
+// s.js
+var m = require("./math"); // 导入了math模块
+
+function circle(r){
+    return m1.mutiple(m1.PI,m1.square(r));
+}
+
+module.exports = {
+    s_circle:circle
+}
+
+// main.js
+var s = require("./s.js");
+
+// 注意使用的话 需要用node来使用
+
+// 要在前端开发中使用的话要采用webpack?? 
+~~~
+
+## Gulp
+
+~~~js
+// 自动化 可以将一些比较重复的工作自动化 基于Node.js
+// 感觉搜索引擎看看就可以了吧?
+var gulp = require('gulp')
+
+// 创建一个gulp任务,
+// 参数1,任务名 参数2:任务所依赖的其他任务,参数3:执行任务执行的代码
+gulp.task('copy-index',functon () {
+    // gulp.src 取到需要的文件 gulp.dest 写到某个路径下
+	gulp.src("file path").pipe(gulp.dest("goal dir path"))
+})
+
+// 文件夹中还有文件夹的写法 ./**/*.*  
+// ** 代表递归 *.* 代表所有类型的文件
+
+// 多任务同时运行
+gulp.task(name,[ntask1,task2,...])
+~~~
+
+## Gulp插件
+
+~~~js
+// 处理JS
+// 1,连接JS文件 gulp-concat var concat = require('gulp-concat')
+// 2,压缩JS gulp-uglify 一样的 先连接 然后压缩 然后dest
+// 文件重命名 gulp-rename
+var concat = require('gulp-concat')
+var concat = require('gulp-uglify')
+var concat = require('gulp-rename')
+gulp.task('concat',functon () {
+	gulp.src("file path")
+    .pipe(concat("output file name"))
+	.pipe(gulp.dest("output file dir path"))
+    .pipe(uglify())
+	.pipe(reanme("./new-name"))
+    .pipe("output file dir path")
+})
+
+// 处理Sass文件 gulp-sass gulp-minify-css
+var sass = require('gul')p-sass
+var minify = require('gulp-minify-css')
+gulp.task('sass',functon () {
+	gulp.src("file path")
+	// 错误处理 gulp-plumber 在css出错的时候监听不会炸
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(gulp.dest("./dist/css"))
+    .pipe(minify())
+    .pipe(rename(function(filename) {
+    filename.basename += '.min'
+	}))
+    .pipe("output file dir path")
+})
+
+// 监听任务 gulp watch
+gulp.task('watch',function () {
+    // 格式 gulp.watch("file",["task_name1","task_name2"]);
+    gulp.watch("./src/index.html",["copy-index"]);
+    ...
+})
+
+// 热更新 gulp-connect
+var connect = require('gulp-connect')
+gulp.task("server",function () {
+    connect.server({
+        // root 指定需要热更新的目录
+        root:'./dist',
+        libereload:true
+    })
+})
+    
+gulp.task("reload",function () {
+    gulp.src("./dist/**/*.html)
+             .pipe(connect.reload());
+})
+ 
+gulp.task("default",['watch'],function () {
+});
 
 
 
-
+~~~
 
