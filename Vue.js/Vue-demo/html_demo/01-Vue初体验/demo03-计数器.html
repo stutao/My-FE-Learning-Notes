@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-    </head>
-    <body>
-        <div id="app">
-            <h2>当前计数:{{count}}</h2>
-            <!-- 可以采用@语法糖 代替v-on等方法-->
-            <button v-on:click="add">+</button>
-            <button v-on:click="sub">-</button>
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h2>当前计数:{{count}}</h2>
+      <!-- 可以采用@语法糖 代替v-on等方法-->
+      <button v-on:click="add">+</button>
+      <button v-on:click="sub">-</button>
+    </div>
 
-        <script src="../../vue_src/vue.js"></script>
-        <script>
-            const app = new Vue({
-                el: '#app',
-                data: {
-                    count: 0,
-                },
-                methods: {
-                    add: function () {
-                        //count++ 这个样子是无法执行成功的
-                        //需要使用this来获取
-                        this.count++;
-                        console.log('add执行');
-                    },
-                    sub: function () {
-                        this.count++;
-                        console.log('sub执行');
-                    },
-                },
-            });
-        </script>
-    </body>
+    <script src="../../vue_src/vue.js"></script>
+    <script>
+      const app = new Vue({
+        el: '#app',
+        data: {
+          count: 0,
+        },
+        methods: {
+          add: function () {
+            //count++ 这个样子是无法执行成功的
+            //需要使用this来获取
+            this.count++
+            console.log('add执行')
+          },
+          sub: function () {
+            this.count++
+            console.log('sub执行')
+          },
+        },
+      })
+    </script>
+  </body>
 </html>
