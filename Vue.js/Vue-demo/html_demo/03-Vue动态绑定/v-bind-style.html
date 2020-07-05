@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 对象语法 -->
+      <!-- <h2 :style="{key(属性名字):value(属性值)}">哈哈哈</h2> -->
+      <!-- 传递方式一种是字符串,另一种是不带引号的,表示data的key变量 -->
+      <!-- <h2 :style="{fontSize:'52px'}">哈哈哈</h2> -->
+      <h2 :style="{fontSize:finalSize}">哈哈哈</h2>
+
+      <!-- 数组语法 -->
+      <h2 :style="{fontSize:[baseStyle,baseStyle1]}">哈哈哈</h2>
+    </div>
+
+    <script>
+      //创建Vue实例,得到 ViewModel
+      var app = new Vue({
+        el: '#app',
+        data: {
+          finalSize: '52px',
+          baseStyle: { color: 'red' },
+          baseStyle1: { fontSize: '52px' },
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+</html>
