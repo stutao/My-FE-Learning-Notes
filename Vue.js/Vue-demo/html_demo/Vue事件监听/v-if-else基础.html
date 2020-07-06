@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- <h2 v-if="is_show">abc</h2>
+      <h2 v-else>is_show为false,显示我</h2> -->
+
+      <!-- 这么复杂的判断,建议使用computed -->
+      <!-- <h2 v-if='sorce>90'>优秀</h2>
+      <h2 v-else-if='sorce>=80'>良好</h2>
+      <h2 v-else-if='sorce>=70'>及格</h2>
+      <h2 v-else>不及格</h2> -->
+
+      <!-- 计算属性方式 -->
+      <h2>{{result}}</h2>
+    </div>
+
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          is_show: true,
+          sorce: 95,
+        },
+        computed: {
+          result() {
+            if (this.sorce >= 90) {
+              showMessage = '优秀'
+            } else if (this.sorce >= 80) {
+              showMessage = '良好'
+            } else {
+              showMessage = '及格'
+            }
+          },
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+</html>

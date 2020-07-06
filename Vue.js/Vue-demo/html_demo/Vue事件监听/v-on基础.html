@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 如果这个事件对应的方法没有参数可以省略括号 -->
+      <button @click="add">button1</button>
+      <!-- 当前事件没有传参,但是方法需要一个参数 默认传入的是浏览器生成的event-->
+      <button @click="add1">button2</button>
+      <!-- 在方法定义时,需要event对象同时又需要其他参数 -->
+      <button @click="add2('123',$event)">button3</button>
+    </div>
+
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {
+          add() {},
+          add1(evt) {
+            console.log(evt)
+          },
+          add2(a,evt) {
+            console.log(evt)
+            console.log(a)
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

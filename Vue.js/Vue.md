@@ -260,3 +260,115 @@ computed: {
 使用计算属性computed会采用缓存,多次使用的话内部的函数只会调用一次.
 而使用methods中的方法,每次使用都会调用这个函数.
 ~~~
+
+## V-on
+~~~html
+// 基础内容
+<body>
+  <div id="app">
+    <!-- 如果这个事件对应的方法没有参数可以省略括号 -->
+    <button @click="add">button1</button>
+    <!-- 当前事件没有传参,但是方法需要一个参数 默认传入的是浏览器生成的event-->
+    <button @click="add1">button2</button>
+    <!-- 在方法定义时,需要event对象同时又需要其他参数 -->
+    <button @click="add2('123',$event)">button3</button>
+  </div>
+
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {},
+      methods: {
+        add() {},
+        add1(evt) {
+          console.log(evt)
+        },
+        add2(a,evt) {
+          console.log(evt)
+          console.log(a)
+        },
+      },
+    })
+  </script>
+</body>
+
+// 修饰符 
+// 修饰符阻止事件冒泡 @click.stop 要阻止那个标签就添加在哪.
+<div @click='divclick'>
+  <button @click.stop='btnclick'>按钮</button>  
+</div>
+
+// 修饰符阻止标签默认事件,@click.prevent
+// 修饰符键盘点击-监听某个按键 比如回车enter@keyup.enter
+// .native 监听组件的事件
+// .once 只触发一次回调.
+~~~
+## v-if v-else v-else-if
+~~~html
+<body>
+  <div id="app">
+    <!-- <h2 v-if="is_show">abc</h2>
+    <h2 v-else>is_show为false,显示我</h2> -->
+
+    <!-- 这么复杂的判断,建议使用computed -->
+    <!-- <h2 v-if='sorce>90'>优秀</h2>
+    <h2 v-else-if='sorce>=80'>良好</h2>
+    <h2 v-else-if='sorce>=70'>及格</h2>
+    <h2 v-else>不及格</h2> -->
+
+    <!-- 计算属性方式 -->
+    <h2>{{result}}</h2>
+  </div>
+
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        is_show: true,
+        sorce: 95,
+      },
+      computed: {
+        result() {
+          if (this.sorce >= 90) {
+            showMessage = '优秀'
+          } else if (this.sorce >= 80) {
+            showMessage = '良好'
+          } else {
+            showMessage = '及格'
+          }
+        },
+      },
+      methods: {},
+    })
+  </script>
+</body>
+~~~
+## 使用v-if v-else 切换输入类型实例
+~~~html
+// 写的过程中碰到蛮多问题的 
+// 问题一:对于标签的使用还不是很熟练,后面需要继续加强一些html相关内容
+// 问题二:在使用vue的语法的时候,在html中外面包裹了双引号,这个不能忘记
+<body>
+  <div id="app">
+    <span v-if="isUser">
+      <label for="userName">用户名</label>
+      <input type="text" id="userName" placeholder="用户名" />
+    </span>
+    <span v-else>
+      <label for="userEmail">用户邮箱</label>
+      <input type="text" id="userEmail" placeholder="用户邮箱" />
+    </span>
+    <button @click="isUser=!isUser">切换类型</button>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isUser: true,
+      },
+      methods: {},
+    })
+  </script>
+</body>
+~~~
