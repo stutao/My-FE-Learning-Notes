@@ -347,7 +347,12 @@ computed: {
 ~~~html
 // 写的过程中碰到蛮多问题的 
 // 问题一:对于标签的使用还不是很熟练,后面需要继续加强一些html相关内容
-// 问题二:在使用vue的语法的时候,在html中外面包裹了双引号,这个不能忘记
+// 问题二:在使用vue的语法的时候,代码在html中是包裹了双引号的
+// 问题三:切换类型的时候,input中的值没有修改
+   // 解答问题三,
+   // 因为Vue会有一个虚拟DOM 做中间层,将一些重复的东西省去
+   // 表面上看是重新创建了input 其实只是把之前那个input标签的相关属性改了
+   // 解决方案 在对应标签上加上key属性,如果两个key一样,那么就复用,反之,不复用
 <body>
   <div id="app">
     <span v-if="isUser">
@@ -366,6 +371,27 @@ computed: {
       el: '#app',
       data: {
         isUser: true,
+      },
+      methods: {},
+    })
+  </script>
+</body>
+~~~
+## v-show的使用
+~~~html
+<body>
+  <div id="app">
+    <!-- 使用v-if的时候,如果isShow是false这个h1标签都不在DOM树上 -->
+    <h1 v-if="isShow" id="aaa"></h1>
+    <!-- 而使用v-show的时候,标签还是在的 只是加了一个属性dispalay -->
+    <h2 v-show="isShow" id="bbb"></h2>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isShow: true,
       },
       methods: {},
     })
