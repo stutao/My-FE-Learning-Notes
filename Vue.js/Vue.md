@@ -398,3 +398,71 @@ computed: {
   </script>
 </body>
 ~~~
+## v-for的使用
+~~~html
+// 建议在使用v-for的时候,给标签绑定一个key属性
+// 主要是提高性能,
+// 如数组中间插入元素时候从虚拟dom渲染到真实dom的一个过程 
+// 主要涉及到的是一个diff算法
+
+// 遍历数组
+<div id="app">
+    <ul>
+      <!-- 未使用数组的下标 -->
+      <li v-for="name in names" :key="name">{{name}}</li>
+      <!-- 使用下标的方式 
+          注意的是第一个接收的元素内容,第二个接收的是下标-->
+      <li v-for="(name,index) in names">{{index}}-{{name}}</li>
+      
+    </ul>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        names: ['zt', 'jerry', 'tomy', 'tom'],
+      },
+      methods: {},
+    })
+  </script>
+
+// 遍历对象
+<div id="app">
+  <ul>
+    <!-- 直接遍历对象获取到的是value -->
+    <li v-for="item in obj">{{item}}</li>
+    <!-- 获取key就加入key的内容 注意前面接收value 后面接收Key-->
+    <li v-for="(item,key) in obj">{{key}}-{{item}}</li>
+    <!-- 同时获取key,value,index -->
+    <li v-for="(item,key,index) in obj" :key="item">{{index}}-{{key}}-{{item}}</li>
+  </ul>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      obj: {
+        name: 'tom',
+        age: 18,
+        height: 180,
+      },
+    },
+    methods: {},
+  })
+</script>
+~~~
+## v-for更新数组是否响应式的方法
+```js
+// 可以响应的
+push()
+pop()
+shift()
+unshift()
+splice()
+
+// 非响应式
+// 使用索引修改数组内容,
+arr[0] = 'bbb' 
+```

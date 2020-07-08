@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <ul>
+        <!-- 未使用数组的下标 -->
+        <li v-for="name in names">{{name}}</li>
+        <!-- 使用下标的方式 
+            注意的是第一个接收的元素内容,第二个接收的是下标-->
+        <li v-for="(name,index) in names">{{index}}-{{name}}</li>
+        
+      </ul>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          names: ['zt', 'jerry', 'tomy', 'tom'],
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+</html>
