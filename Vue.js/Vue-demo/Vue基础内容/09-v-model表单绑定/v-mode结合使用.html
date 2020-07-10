@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 和radio的结合使用 -->
+      <input type="radio" id="male" value="male" v-model="sex" />male
+      <input type="radio" id="female" value="female" v-model="sex" />female
+      <h2>选择的性别是:{{sex}}</h2>
+
+      <!-- 和checkbox多选的结合使用 分单选多选-->
+      <!-- 会自动push到列表里面去 -->
+      <input type="checkbox" value="足球" v-model="hobbies" />足球
+      <input type="checkbox" value="篮球" v-model="hobbies" />篮球
+      <input type="checkbox" value="羽毛球" v-model="hobbies" />羽毛球
+      <h2>爱好是:{{hobbies}}</h2>
+
+      <!-- 结合select的使用 也分单选和多选-->
+      <!-- 单选 -->
+      <select v-model="fruit">
+        <option value="apple">apple</option>
+        <option value="apple1">apple1</option>
+        <option value="apple2">apple2</option>
+      </select>
+      -->
+      <!-- <h2>选择的水果{{fruit}}</h2>
+      <!-- 多选 需要用ctrl按住多选-->
+      <select v-model="fruits" multiple>
+        <option value="apple">apple</option>
+        <option value="apple1">apple1</option>
+        <option value="apple2">apple2</option>
+      </select>
+      <h2>选择的水果有{{fruits}}</h2>
+
+      <!-- 这个value值最好是通过值绑定来做 -->
+      <label v-for="item in bindValue" :for="item">
+        <input
+          type="checkbox"
+          :value="item"
+          :id="item"
+          v-model="bindValue"
+        />{{item}}
+      </label>
+      <h2>选择:{{bindValue}}</h2>
+
+      <!-- 修饰符内容 -->
+      <!-- 修饰符 lazy 在input失去焦点或者敲回车的时候会绑定 -->
+      <input type="text" v-model.lazy="lazyMsg" />{{lazyMsg}}
+
+      <!-- 修饰符 number -->
+      <!-- v-model赋值过来的值都是string类型的 使用number修饰符会是number类型-->
+      <input
+        type="number"
+        v-model.number="numberMsg"
+      />{{numberMsg}}{{typeof(numberMsg)}}
+
+      <!-- 修饰符stirm 将值两边的空格删除-->
+      <input type="number" v-model.strim="strimMsg" />{{strimMsg}}
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          sex: '',
+          hobbies: [],
+          fruit: 'apple',
+          fruits: [],
+          bindValue: ['足球', '篮球', '台球', '秋千'],
+          lazyMsg: 'lazymsg',
+          numberMsg: 10,
+          strimMsg: '',
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+</html>

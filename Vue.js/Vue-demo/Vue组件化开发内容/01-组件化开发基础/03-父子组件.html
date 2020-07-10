@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cp2></cp2>
+    </div>
+
+    <script>
+      // 当前模板里面cpnC2是父组件,cpnC1是子组件
+      // 子组件只能在父组件作用域之间使用
+      const cpnC1 = Vue.extend({
+        template: `
+                    <div>
+                        <h2>组件内容1</h2>
+                    </div>
+                `,
+      })
+      const cpnC2 = Vue.extend({
+        template: `
+                    <div>
+                        <h2>组件内容2</h2>
+                        <cp1></cp1>
+                    </div>
+                `,
+        components: {
+          cp1: cpnC1,
+        },
+      })
+      // 可以将app这个当做root组件
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        components: {
+          cp2: cpnC2,
+        },
+      })
+    </script>
+  </body>
+</html>

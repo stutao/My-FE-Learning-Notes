@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cpn></cpn>
+    </div>
+    <!-- 写法1 使用script 必须指定type="text/x-template" -->
+    <script type="text/x-template" id="cpn">
+        <div>
+          <h2>组件模板1</h2>
+      </div>
+    </script>
+
+    <!-- 写法2 直接使用template标签-->
+    <template id="cpn2">
+      <div>
+        <h2>组件模板2</h2>
+      </div>
+    </template>
+    <script>
+      Vue.component('cpn', {
+        // 这个可以直接指定选择器,然后读取对应的html代码
+        template: '#cpn2',
+      })
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+      })
+    </script>
+  </body>
+</html>

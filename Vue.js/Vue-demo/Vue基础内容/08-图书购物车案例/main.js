@@ -17,7 +17,7 @@ const app = new Vue({
       {
         id: 3,
         name: '故事会',
-        price: 198,
+        price: 198.0,
         count: 1,
       },
       {
@@ -30,11 +30,14 @@ const app = new Vue({
   },
   computed: {
     totalPrice() {
-      let resPrice = 0
-      for (let i of this.books) {
-        resPrice += i.price
-      }
-      return resPrice
+      // let resPrice = 0
+      // for (let i of this.books) {
+      //   resPrice += i.price
+      // }
+      // return resPrice
+      return this.books.reduce(function(pre,book){
+        return pre+book.price
+      },0)
     },
   },
   methods: {

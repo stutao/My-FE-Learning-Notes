@@ -474,3 +474,321 @@ arr[0] = 'bbb'
 具体内容看08-图书购物车的代码
 涉及到的内容包括08之前的所有,还有过滤器的相关知识.
 ```
+## v-model双向绑定
+```html
+// 基本使用与基本原理
+//可以通过v-bind v-on 组合出双向绑定的内容
+<body>
+  <div id="app">
+    <!-- 自动绑定了这个标签的value 并且支持动态更新-->
+    <!-- 同时当改变页面上的value值 对应的msg也会修改 所以叫做双向绑定 -->
+    <input type="text" v-model="msg" />{{msg}}
+    <br />
+    <!-- 组合v-bind  v-on实现双向绑定-->
+    <input type="test" :value="msg1" @input="valueChange" />
+    {{msg1}}
+    <br />
+    <!-- 简便方式 -->
+    <input type="test" :value="msg2" @input="msg2 = $event.target.value" />
+    {{msg2}}
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        msg: '你好',
+        msg1: '组合绑定1',
+        msg2: '组合绑定2',
+      },
+      methods: {
+        valueChange(e) {
+          // 使用e.tartget 可以获取当前触发事件的标签
+          // 修改msg1的值
+          this.msg1 = e.target.value
+        },
+      },
+    })
+  </script>
+</body>
+```
+
+### v-mode的结合使用,值绑定,修饰符内容
+```html
+<body>
+  <div id="app">
+    <!-- 和radio的结合使用 -->
+    <input type="radio" id="male" value="male" v-model="sex" />male
+    <input type="radio" id="female" value="female" v-model="sex" />female
+    <h2>选择的性别是:{{sex}}</h2>
+
+    <!-- 和checkbox多选的结合使用 分单选多选-->
+    <!-- 会自动push到列表里面去 -->
+    <input type="checkbox" value="足球" v-model="hobbies" />足球
+    <input type="checkbox" value="篮球" v-model="hobbies" />篮球
+    <input type="checkbox" value="羽毛球" v-model="hobbies" />羽毛球
+    <h2>爱好是:{{hobbies}}</h2>
+
+    <!-- 结合select的使用 也分单选和多选-->
+    <!-- 单选 -->
+    <select v-model="fruit">
+      <option value="apple">apple</option>
+      <option value="apple1">apple1</option>
+      <option value="apple2">apple2</option>
+    </select>
+    -->
+    <!-- <h2>选择的水果{{fruit}}</h2>
+    <!-- 多选 需要用ctrl按住多选-->
+    <select v-model="fruits" multiple>
+      <option value="apple">apple</option>
+      <option value="apple1">apple1</option>
+      <option value="apple2">apple2</option>
+    </select>
+    <h2>选择的水果有{{fruits}}</h2>
+
+    <!-- 这个value值最好是通过值绑定来做 -->
+    <label v-for="item in bindValue" :for="item">
+      <input
+        type="checkbox"
+        :value="item"
+        :id="item"
+        v-model="bindValue"
+      />{{item}}
+    </label>
+    <h2>选择:{{bindValue}}</h2>
+
+    <!-- 修饰符内容 -->
+    <!-- 修饰符 lazy 在input失去焦点或者敲回车的时候会绑定 -->
+    <input type="text" v-model.lazy="lazyMsg" />{{lazyMsg}}
+
+    <!-- 修饰符 number -->
+    <!-- v-model赋值过来的值都是string类型的 使用number修饰符会是number类型-->
+    <input
+      type="number"
+      v-model.number="numberMsg"
+    />{{numberMsg}}{{typeof(numberMsg)}}
+
+    <!-- 修饰符stirm 将值两边的空格删除-->
+    <input type="number" v-model.strim="strimMsg" />{{strimMsg}}
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        sex: '',
+        hobbies: [],
+        fruit: 'apple',
+        fruits: [],
+        bindValue: ['足球', '篮球', '台球', '秋千'],
+        lazyMsg: 'lazymsg',
+        numberMsg: 10,
+        strimMsg: '',
+      },
+      methods: {},
+    })
+  </script>
+  </body>
+```
+## Vue的组件化开发
+
+## 组件化的思想
+```
+一个页面由多个组件构成,多个组件组成的一个组件树.
+  提高可维护性,同时也可以提高代码的复用性.
+```
+
+## 注册组件的基本步骤
+```
+1,创建组件构造器
+  Vue.extends()方法
+2,注册组件
+  调用Vue.component()方法
+3,使用组件
+  在Vue的实例作用范围内使用组件
+```
+### 注册组件的代码实现
+```html
+<body>
+  <div id="app">
+    <my-cpn></my-cpn>
+    <my-cpn></my-cpn>
+    <my-cpn></my-cpn>
+  </div>
+
+  <script>
+    // 1, 创建组件构造器对象
+    const cpnC = Vue.extend({
+      // ES6使用 ``
+      template: `
+          <div>
+              <h2>标题2</h2>
+              <h3>标题3</h3>
+              <h2>再来标题2</h2>
+          </div>
+          `,
+    })
+    // 2,注册组件
+    Vue.component('my-cpn', cpnC)
+    // 3,使用
+    // 在html中使用<my-cpn></my-cpn>标签 注意需要在vue托管的作用域中
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+    })
+  </script>
+</body>
+```
+
+### 全局组件和局部组件
+```html
+  <body>
+    <div id="app">
+      <cpn></cpn>
+    </div>
+
+    <script>
+      // 1, 创建组件构造器对象
+      const cpnC = Vue.extend({
+        // ES6使用 ``
+        template: `
+            <div>
+                <h2>标题2</h2>
+                <h3>标题3</h3>
+                <h2>再来标题2</h2>
+            </div>
+            `,
+      })
+      // 2,注册组件 当前这样是注册的全局组件
+      // 全局组建意味着可以在不同的Vue实例中使用
+      //   Vue.component('cpn', cpnC)
+      // 如何注册局部组件呢?
+
+      // 3,使用
+      // 在html中使用<my-cpn></my-cpn>标签 注意需要在vue托管的作用域中
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        // 注册局部组件
+        components: {
+          // key:代表标签名
+          // value:组件构造器
+          cpn: cpnC,
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+```
+
+### 父子组件
+```html
+  <body>
+    <div id="app">
+      <cp2></cp2>
+    </div>
+
+    <script>
+      // 当前模板里面cpnC2是父组件,cpnC1是子组件
+      // 子组件只能在父组件作用域之间使用
+      // 在html中直接定义父组件标签就好了,在其中会直接编译子组件的标签
+      const cpnC1 = Vue.extend({
+        template: `
+                    <div>
+                        <h2>组件内容1</h2>
+                    </div>
+                `,
+      })
+      const cpnC2 = Vue.extend({
+        template: `
+                    <div>
+                        <h2>组件内容2</h2>
+                        <cp1></cp1>
+                    </div>
+                `,
+        components: {
+          cp1: cpnC1,
+        },
+      })
+      // 可以将app这个当做root组件
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        components: {
+          cp2: cpnC2,
+        },
+      })
+    </script>
+  </body>
+```
+
+### 组件注册语法糖
+```html
+<body>
+  <div id="app">
+    <cpn2></cpn2>
+  </div>
+
+  <script>
+    // 语法糖注册全局组件
+    // Vue.component =
+      // ('cpn1',
+      // {
+      //   template: `
+      //             <div>
+      //                 <h2>组件内容1</h2>
+      //             </div>
+      //         `,
+      // })
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+      components: {
+        // 注册局部组件
+        cpn2: {
+          template: `
+                  <div>
+                      <h2>组件内容1</h2>
+                  </div>
+              `,
+        },
+      },
+    })
+  </script>
+</body>
+```
+### 组件模板分离写法
+```html
+<body>
+  <div id="app">
+    <cpn></cpn>
+  </div>
+  <!-- 写法1 使用script 必须指定type="text/x-template" -->
+  <script type="text/x-template" id="cpn">
+      <div>
+        <h2>组件模板1</h2>
+    </div>
+  </script>
+
+  <!-- 写法2 直接使用template标签-->
+  <template id="cpn2">
+    <div>
+      <h2>组件模板2</h2>
+    </div>
+  </template>
+  <script>
+    Vue.component('cpn', {
+      // 这个可以直接指定选择器,然后读取对应的html代码
+      template: '#cpn2',
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+    })
+  </script>
+</body>
+```

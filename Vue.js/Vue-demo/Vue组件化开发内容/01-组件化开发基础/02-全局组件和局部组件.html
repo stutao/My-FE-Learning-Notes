@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cpn></cpn>
+    </div>
+
+    <script>
+      // 1, 创建组件构造器对象
+      const cpnC = Vue.extend({
+        // ES6使用 ``
+        template: `
+            <div>
+                <h2>标题2</h2>
+                <h3>标题3</h3>
+                <h2>再来标题2</h2>
+            </div>
+            `,
+      })
+      // 2,注册组件 当前这样是注册的全局组件
+      // 全局组建意味着可以在不同的Vue实例中使用
+      //   Vue.component('cpn', cpnC)
+      // 如何注册局部组件呢?
+
+      // 3,使用
+      // 在html中使用<my-cpn></my-cpn>标签 注意需要在vue托管的作用域中
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        // 注册局部组件
+        components: {
+          // key:代表标签名
+          // value:组件构造器
+          cpn: cpnC,
+        },
+        methods: {},
+      })
+    </script>
+  </body>
+</html>

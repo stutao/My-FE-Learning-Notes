@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 自动绑定了这个标签的value 并且支持动态更新-->
+      <!-- 同时当改变页面上的value值 对应的msg也会修改 所以叫做双向绑定 -->
+      <input type="text" v-model="msg" />{{msg}}
+      <br />
+      <!-- 组合v-bind  v-on实现双向绑定-->
+      <input type="test" :value="msg1" @input="valueChange" />
+      {{msg1}}
+      <br />
+      <!-- 简便方式 -->
+      <input type="test" :value="msg2" @input="msg2 = $event.target.value" />
+      {{msg2}}
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          msg: '你好',
+          msg1: '组合绑定1',
+          msg2: '组合绑定2',
+        },
+        methods: {
+          valueChange(e) {
+            // 使用e.tartget 可以获取当前触发事件的标签
+            // 修改msg1的值
+            this.msg1 = e.target.value
+          },
+        },
+      })
+    </script>
+  </body>
+</html>
