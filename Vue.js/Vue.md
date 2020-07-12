@@ -792,3 +792,38 @@ arr[0] = 'bbb'
   </script>
 </body>
 ```
+
+### 组件内可以访问当vue实例的内容么?
+```
+实验之后是发现不能访问,如组件中的双大括号语法是访问不到实例的data中的变量的
+
+即使可以使用,也不建议这么用.容易造成臃肿
+```
+使用方法
+```html
+
+<template id="cpn2">
+  <div>
+    <h2>组件模板2</h2>
+    <!-- 这可以动态的显示数据 -->
+    <h3>{{title}}</h3>
+  </div>
+</template>
+<script>
+  Vue.component('cpn', {
+    // 这个可以直接指定选择器,然后读取对应的html代码
+    template: '#cpn2',
+    // 这里的data属性是一个函数,返回一个对象,对象中包含对应的变量
+    data(){
+      return {
+        title:"abc"
+      }
+    }
+  })
+  var app = new Vue({
+    el: '#app',
+    data: {},
+    methods: {},
+  })
+</script>
+```

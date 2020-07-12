@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <template id="cpn2">
+      <div>
+        <h2>组件模板2</h2>
+        <h3>{{title}}</h3>
+      </div>
+    </template>
+    <script>
+      // 这个标签可以用多次,这时候每次都是调用了这个data函数,
+      // 如果不是 那改变其中一个标签 会影响到其他的标签,不符合设计理念
+      // 返回了一个对象,也就是说类似于每次标签调用都是获取一个新的对象
+      Vue.component('cpn', {
+        // 这个可以直接指定选择器,然后读取对应的html代码
+        template: '#cpn2',
+        data() {
+          return {
+            title: 'abc',
+          }
+        },
+      })
+      //创建Vue实例,得到 ViewModel
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+      })
+    </script>
+  </body>
+</html>

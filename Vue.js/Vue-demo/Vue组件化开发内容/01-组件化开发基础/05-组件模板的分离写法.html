@@ -23,12 +23,18 @@
     <template id="cpn2">
       <div>
         <h2>组件模板2</h2>
+        <h3>{{title}}</h3>
       </div>
     </template>
     <script>
       Vue.component('cpn', {
         // 这个可以直接指定选择器,然后读取对应的html代码
         template: '#cpn2',
+        data(){
+          return {
+            title:"abc"
+          }
+        }
       })
       var app = new Vue({
         el: '#app',
