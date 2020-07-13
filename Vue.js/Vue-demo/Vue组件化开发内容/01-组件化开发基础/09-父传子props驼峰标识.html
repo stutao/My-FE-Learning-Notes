@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cpn :c-info="info"></cpn>
+    </div>
+
+    <template id="cpn">
+      <div>
+        <h2>{{cInfo}}</h2>        
+      </div>
+    </template>
+    <script>
+      const cpn = {
+        template:'#cpn',
+        props:{
+          // 如果这里使用的驼峰标识,在组件标签绑定的时候需要转换
+          // cInfo -> c-info 
+          cInfo:{
+            type:Object,
+            default(){
+              return {}
+            }
+          }
+        },
+      }
+      var app = new Vue({
+        el: '#app',
+        data: {
+          info:{
+            name:'zt',
+            age:18
+          }
+        },
+        methods: {},
+        components:{
+          cpn
+        }
+      });
+    </script>
+  </body>
+
+</html>

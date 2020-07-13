@@ -827,3 +827,172 @@ arr[0] = 'bbb'
   })
 </script>
 ```
+
+### 父子组件之间的通信
+```
+子组件是不能直接引用父组件或者Vue实例的数据的,
+但是有时候确实是需要数据之间的传递.
+```
+#### Vue的实现 代码将Vue实例作为父组件.
+##### 父组件->子组件  通过props向子组件传递数据,
+```html
+<body>
+  <div id="app">
+    <!-- 使用v-bind绑定的是子组件的props中的一个变量名或者KEY -->
+    <!-- 等于号后面指定的是父组件的变量名 -->
+    <cpn :cmovies="movies" :cmessage="message"></cpn>
+    <!-- 这里直接未绑定cmessage 这样就会显示默认值 -->
+    <cpn :cmovies='movies'></cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <ul>
+        <li v-for="item in cmovies">{{item}}</li>
+      </ul>
+      <p>{{cmovies}}</p>
+      <h2>{{cmessage}}</h2>
+    </div>
+  </template>
+
+  <script>
+    // 父传子使用--props
+    const cpn = {
+      template: '#cpn',
+      // 这个是数组写法
+      // props: ['cmovies', 'cmessage'],
+
+      // 使用对象写法 可以给变量指定类型,可以给这个变量做一个验证
+      props: {
+        // 1,类型限制
+        // cmovies: Array,
+        // cmessage: String,
+        
+        // 2, 指定对象,可以指定类型和默认值以及必传值
+        // 当没有传值的时候,显示默认值
+        cmovies:{
+          // 当类型是对象或者数组时,默认值必须是一个函数
+          // 这个类型可以是自己的一个类
+          type:Array,
+          // 这里不能直接指定一个列表类型的默认值
+          default(){
+            return []
+          },
+          // 表示是否必传
+          required:true
+        },
+        cmessage:{
+          type:String,
+          default:'默认message'
+        },
+        // 自定义验证方式
+        validator:function(value){
+          return 
+        }
+      },
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        movies: ['海王', '飞驰', '人生'],
+        message: 'nihao ',
+      },
+      methods: {},
+      components: {
+        cpn,
+      },
+    })
+  </script>
+</body>
+
+```
+
+##### 在props中使用驼峰命名.
+```js
+// 需要进行转换
+const cpn = {
+  template:'#cpn',
+  props:{
+    // 如果这里使用的驼峰标识,在组件标签绑定的时候需要转换
+    // cInfo -> c-info 
+    cInfo:{
+      type:Object,
+      default(){
+        return {}
+      }
+    }
+  },
+}
+var app = new Vue({
+  el: '#app',
+  data: {
+    info:{
+      name:'zt',
+      age:18
+    }
+  },
+  methods: {},
+  components:{
+    cpn
+  }
+});
+```
+##### 子组件->父组件  通过事件向父组件传递数据
+* 有的时候需要传递某个事件告诉父组件,比如说点击了导航栏,要进行跳转了这样
+```html
+// 需要注意的几点
+// 1, 使用this.$emit() 发送自定义事件不要用驼峰写法,
+// 2, 组件事件监听不传入参数的话 默认接收的是自定义事件
+// 代码如下
+<body>
+  <div id="app">
+    <!-- 这个自定义事件不要用驼峰写法 后面用脚手架是可以的-->
+    <!-- 这里不写参数的话会自动将自定义事件附带的数据传过去 -->
+    <cpn @item-click="cpnClick"></cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <button v-for="category in categories" 
+      @click="btnClick(category)">
+        {{category.name}}
+      </button>
+    </div>
+  </template>
+
+  <script>
+    const cpn = {
+      template: '#cpn',
+      data() {
+        return {
+          categories: [
+            { id: 'xlajsd', name: '热门推荐' },
+            { id: 'dddxx', name: '手机数码' },
+            { id: 'weef', name: '鞋服' },
+            { id: 'jkjhjh', name: '电脑外设' },
+          ],
+        }
+      },
+      methods:{
+        btnClick(item){
+          // 发送一个自定义事件 这个自定义事件不要用驼峰写法
+          // 第一个参数是参数名字,后面那个是传递的对象
+          this.$emit('item-click',item)
+        }
+      }
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {
+        cpnClick(e){
+          console.log(e.name)
+        }
+      },
+      components: {
+        cpn,
+      },
+    })
+  </script>
+</body>
+```

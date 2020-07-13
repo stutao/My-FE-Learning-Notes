@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 使用v-bind绑定的是子组件的props中的一个变量名或者KEY -->
+      <!-- 等于号后面指定的是父组件的变量名 -->
+      <cpn :cmovies="movies" :cmessage="message"></cpn>
+      <!-- 这里直接未绑定cmessage 这样就会显示默认值 -->
+      <cpn :cmovies='movies'></cpn>
+    </div>
+
+    <template id="cpn">
+      <div>
+        <ul>
+          <li v-for="item in cmovies">{{item}}</li>
+        </ul>
+        <p>{{cmovies}}</p>
+        <h2>{{cmessage}}</h2>
+      </div>
+    </template>
+
+    <script>
+      // 父传子使用--props
+      const cpn = {
+        template: '#cpn',
+        // 这个是数组写法
+        // props: ['cmovies', 'cmessage'],
+
+        // 使用对象写法 可以给变量指定类型,可以给这个变量做一个验证
+        props: {
+          // 1,类型限制
+          // cmovies: Array,
+          // cmessage: String,
+          
+          // 2, 指定对象,可以指定类型和默认值以及必传值
+          // 当没有传值的时候,显示默认值
+          cmovies:{
+            // 当类型是对象或者数组时,默认值必须是一个函数
+            // 这个类型可以是自己的一个类
+            type:Array,
+            // 这里不能直接指定一个列表类型的默认值
+            default(){
+              return []
+            },
+            // 表示是否必传
+            required:true
+          },
+          cmessage:{
+            type:String,
+            default:'默认message'
+          },
+          // 自定义验证方式
+          validator:function(value){
+            return 
+          }
+        },
+      }
+      var app = new Vue({
+        el: '#app',
+        data: {
+          movies: ['海王', '飞驰', '人生'],
+          message: 'nihao ',
+        },
+        methods: {},
+        components: {
+          cpn,
+        },
+      })
+    </script>
+  </body>
+</html>
