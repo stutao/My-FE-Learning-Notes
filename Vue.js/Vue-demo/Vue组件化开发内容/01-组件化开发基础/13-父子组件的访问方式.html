@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cpn></cpn>
+      <cpn ref='myref1'></cpn>
+
+      <cpn ref='myref'></cpn>
+      <button @click="btnClick">点我</button>
+    </div>
+
+    <template id="cpn">
+      <div>
+        <h2>子组件</h2>
+      </div>
+    </template>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {
+          btnClick() {
+            // 1,$children 平时开发用的不多
+            // console.log(this.$children)
+            // for (let child of this.$children) {
+            //   console.log(child.name);
+            //   child.showMessage()
+            // }
+            
+            // 2,使用$refs
+            // console.log(this.$refs); 默认是为空的 需要在组件标签上加ref属性
+            // 这是一个对象 ref对应的是一个key值如myref,使用this.refs.myref
+            console.log(this.$refs.myref);
+          },
+        },
+        components: {
+          cpn: {
+            template: '#cpn',
+            data() {
+              return {
+                name: '子组件name',
+              }
+            },
+            methods: {
+              showMessage() {
+                console.log('showMessage')
+              },
+            },
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

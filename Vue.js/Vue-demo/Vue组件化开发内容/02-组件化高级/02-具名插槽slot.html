@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 未指定标签内容 -->
+      <p>未指定标签内容</p>
+      <cpn></cpn>
+
+      <!-- 如果没有指定对应的slot名字,那么只会替换没有name的slot位置 -->
+      <hr>
+      <p>未指定slot参数 最后的文字将替换为按钮</p>
+      <cpn>
+        <button>按钮</button>
+      </cpn>
+      <hr>
+      <p>指定了slot参数为btn 对应为默认按钮将要替换</p>
+      <cpn>
+        <button slot="btn">替换掉默认的btn</button>
+      </cpn>
+    </div>
+
+    <template id="cpn">
+      <div>
+        <h2>
+          插槽的使用
+        </h2>
+        <!-- 可以给一个默认值 如果在组件标签中没用定义 默认使用这里面的 -->
+        <slot name="btn"><button>默认按钮</button></slot>
+        <slot name="word"><span>文字</span></slot>
+        <slot><span>没有指定name的slot</span></slot>
+      </div>
+    </template>
+    <script>
+      const cpn = {
+        template: '#cpn',
+      }
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        components: {
+          cpn,
+        },
+      })
+    </script>
+  </body>
+</html>

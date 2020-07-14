@@ -996,3 +996,209 @@ var app = new Vue({
   </script>
 </body>
 ```
+##### 父子组件加双向绑定input组件数据修改案例-拆分v-model的方式
+```
+如果需要v-model双向绑定数据,不要直接绑定props中的数据,使用data或者computed来做,不要直接修改props中的数据,
+
+再次 input标签中v-model可以改造成v-bind和@input来实现,然后对应的可以发送一个事件给父组件进行修改
+```
+##### 使用watch方式
+
+
+##### 父组件访问子组件的方式
+```html
+<body>
+  <div id="app">
+    <cpn></cpn>
+    <cpn ref='myref1'></cpn>
+
+    <cpn ref='myref'></cpn>
+    <button @click="btnClick">点我</button>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <h2>子组件</h2>
+    </div>
+  </template>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {
+        btnClick() {
+          // 1,$children 平时开发用的不多
+          // console.log(this.$children)
+          // for (let child of this.$children) {
+          //   console.log(child.name);
+          //   child.showMessage()
+          // }
+          
+          // 2,使用$refs
+          // console.log(this.$refs); 默认是为空的 需要在组件标签上加ref属性
+          // 这是一个对象 ref对应的是一个key值如myref,使用this.refs.myref
+          console.log(this.$refs.myref);
+        },
+      },
+      components: {
+        cpn: {
+          template: '#cpn',
+          data() {
+            return {
+              name: '子组件name',
+            }
+          },
+          methods: {
+            showMessage() {
+              console.log('showMessage')
+            },
+          },
+        },
+      },
+    })
+  </script>
+</body>
+```
+
+##### 子组件访问父组件的方式 
+* 开发中基本不用,影响到了组件的复用性
+```html
+<body>
+  <div id="app">
+    <cpn></cpn>
+    
+  </div>
+
+  <template id="cpn">
+    <div>
+      <h2>子组件</h2>
+      <ccpn></ccpn>
+    </div>
+  </template>
+
+  <template id="ccpn">
+    <div>
+      <h2>子子组件</h2>
+      <button @click="btnClick">点我</button>
+    </div>
+  </template>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+      components: {
+        cpn: {
+          template: '#cpn',
+          data() {
+            return {
+              name:'cpn的name'
+            }
+          },
+          components: {
+            ccpn: {
+              template: '#ccpn',
+              methods: {
+                btnClick() {
+                  // 访问父组件,打印出对应的父组件
+                  console.log(this.$parent)
+                  // 访问父组件的内容
+                  console.log(this.$parent.name)
+
+                  // 直接访问根组件 当前是Vue实例
+                  console.log(this.$root);
+                },
+              },
+            },
+          },
+        },
+      },
+    })
+  </script>
+</body>
+```
+
+### Vue组件化高级
+#### 组件插槽的使用
+* 目的是让组件拥有可扩展性
+```html
+// 插槽的基本使用
+<body>
+  <div id="app">
+    <cpn><button>按钮</button></cpn>
+    <cpn></cpn>
+    <cpn><span>span标签</span></cpn>
+    <cpn><button>也是按钮</button></cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <h2>
+        插槽的使用
+      </h2>
+      <!-- 可以给一个默认值 如果在组件标签中没用定义 默认使用这里面的 -->
+      <slot><button>默认按钮</button></slot>
+    </div>
+  </template>
+  <script>
+    const cpn = {
+      template:'#cpn',
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+      components:{
+        cpn
+      }
+    });
+  </script>
+</body>
+```
+* 具名插槽的使用
+```html
+<body>
+  <div id="app">
+    <!-- 未指定标签内容 -->
+    <p>未指定标签内容</p>
+    <cpn></cpn>
+
+    <!-- 如果没有指定对应的slot名字,那么只会替换没有name的slot位置 -->
+    <hr>
+    <p>未指定slot参数 最后的文字将替换为按钮</p>
+    <cpn>
+      <button>按钮</button>
+    </cpn>
+    <hr>
+    <p>指定了slot参数为btn 对应为默认按钮将要替换</p>
+    <cpn>
+      <button slot="btn">替换掉默认的btn</button>
+    </cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <h2>
+        插槽的使用
+      </h2>
+      <!-- 可以给一个默认值 如果在组件标签中没用定义 默认使用这里面的 -->
+      <slot name="btn"><button>默认按钮</button></slot>
+      <slot name="word"><span>文字</span></slot>
+      <slot><span>没有指定name的slot</span></slot>
+    </div>
+  </template>
+  <script>
+    const cpn = {
+      template: '#cpn',
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+      components: {
+        cpn,
+      },
+    })
+  </script>
+</body>
+```
