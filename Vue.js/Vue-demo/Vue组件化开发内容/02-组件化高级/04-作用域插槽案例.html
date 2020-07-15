@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../vue_src/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <cpn></cpn>
+      <cpn></cpn>
+      <!-- 当前在展示的时候不想采用子组件默认的展示效果了 -->
+      <!-- 使用到了作用域插槽 -->
+      <cpn>
+        <!-- 目的是为了获取子组件的pLanguages-->
+        <!-- vue2.5.x以下必须使用template标签包裹 
+          更高的可以用其他的标签-->
+          <template slot-scope="slot">
+            <span v-for="item in slot.data">
+              {{item}}
+            </span>
+          </template>
+      </cpn>
+    </div>
+
+    <template id="cpn">
+      <div>
+        <slot :data="pLanguages">
+          <ul>
+            <li v-for="item in pLanguages">{{item}}</li>
+          </ul>
+        </slot>
+      </div>
+    </template>
+
+    <script>
+      const cpn = {
+        template: '#cpn',
+        data() {
+          return {
+            pLanguages: ['JS', 'C', 'C++', 'Python', 'Go'],
+          }
+        },
+      }
+      var app = new Vue({
+        el: '#app',
+        data: {
+          message: 'nihao',
+        },
+        methods: {},
+        components: {
+          cpn,
+        },
+      })
+    </script>
+  </body>
+</html>

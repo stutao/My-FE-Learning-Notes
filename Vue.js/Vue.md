@@ -1202,3 +1202,97 @@ var app = new Vue({
   </script>
 </body>
 ```
+* 作用域插槽
+先要看编译作用域的内容
+```html
+<body>
+  <div id="app">
+    <!-- 这里的属性是通过Vue实例的属性决定的 当前为false,所以不显示-->
+    <!-- 在使用变量的时候,都会看一下在哪个实例里面 -->
+    <!-- 不会因为在组件标签上用就使用组件作用域  -->
+    <cpn v-show="isShow"></cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <h2>
+        插槽的使用
+      </h2>
+    </div>
+  </template>
+
+  <script>
+    const cpn = {
+      template:'#cpn',
+      data() {
+        return {
+          isShow:true
+        }
+      },
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isShow:false
+      },
+      methods: {},
+      components:{
+        cpn
+      }
+    });
+  </script>
+</body>
+```
+作用域插槽的使用
+```html
+<body>
+  <div id="app">
+    <cpn></cpn>
+    <cpn></cpn>
+    <!-- 当前在展示的时候不想采用子组件默认的展示效果了 -->
+    <!-- 使用到了作用域插槽 -->
+    <cpn>
+      <!-- 目的是为了获取子组件的pLanguages-->
+      <!-- vue2.5.x以下必须使用template标签包裹 
+        更高的可以用其他的标签-->
+        <template slot-scope="slot">
+          <span v-for="item in slot.data">
+            {{item}}
+          </span>
+        </template>
+    </cpn>
+  </div>
+
+  <template id="cpn">
+    <div>
+      <slot :data="pLanguages">
+        <ul>
+          <li v-for="item in pLanguages">{{item}}</li>
+        </ul>
+      </slot>
+    </div>
+  </template>
+
+  <script>
+    const cpn = {
+      template: '#cpn',
+      data() {
+        return {
+          pLanguages: ['JS', 'C', 'C++', 'Python', 'Go'],
+        }
+      },
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'nihao',
+      },
+      methods: {},
+      components: {
+        cpn,
+      },
+    })
+  </script>
+</body>
+```
+
