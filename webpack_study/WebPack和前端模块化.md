@@ -75,7 +75,7 @@ project
     -mathUtil.js
   -index.html
   -package.json
-  -webpack.config.json
+  -webpack.config.js
 
 ```
 
@@ -92,6 +92,7 @@ project
 
   我们使用npm install packagename 的时候 后面不加如-g参数是不会安装到全局的.
   在命令的最后还可以加入 --save-dev 表示的是开发环境 在package.json中会有一个devDenpendncies
+  --save 是开发依赖
 */
 {
   "name": "meetwebpack",
@@ -107,7 +108,7 @@ project
 }
 
 
- // webpack.config.json  webpack依赖的配置文件
+ // webpack.config.js  webpack依赖的配置文件
  // 文件使用commonJS的定义方式,
  /*
   获取path包,主要是为了在output中动态的添加路径 和python的os.path差不多
@@ -180,10 +181,141 @@ export { add, mul }
 1.url-load 其中options 有一个limit的参数,如果设置的数值(字节) > 图片的大小,会直接采用url-loader将图片进行base64编码加载到页面上.
 2,file-loader 当加载的图片大小 > 数值(字节)时候,就要使用file-loader才行了.
   这里还需要注意的是图片的地址问题.index.html没有和图片同级,url加载不出来图片
-  需要在webpack.config.json文件里面的output中加入一个 publicpath:"dist/",这样之后每次涉及到url的操作,都会在前面拼接一个dist/的目录
+  需要在webpack.config.js文件里面的output中加入一个 publicpath:"dist/",这样之后每次涉及到url的操作,都会在前面拼接一个dist/的目录
 
 3,图片名字,
   在url-loader中的options加入name键值
     name:'img/[name].[hash:8].[ext]'
     这样会得出原来文件的name.8位hash值.原来的扩展名.并保存到dist/img/下
+```
+
+## ES6语法转ES5 使用babel-loader,babel-core,babel-preset-es2015(es5转ES6)
+
+## webpack中配置vue
+
+```js
+// npm install vue --save
+
+import Vue from 'vue'
+
+// 在webpack打包的时候可能会出现无法加载template的问题,是因为vue的指向在runtime-only
+// 解决方法
+// 在webpack.config文件中,添加
+resolve:{
+  alias:{
+    'vue$':'vue/dist/vue.esm.js'
+  }
+}
+// 指定之后会使用vue.esm.js 其中就包含了runtime-compiler这样就可以正常使用了.
+```
+
+## 使用Vue
+```html 
+// 当Vue中同时候存在el和template时候,template会将el挂载的元素直接替换掉.
+<body>
+  <div> id="app">
+
+  </div>
+  <script>
+    import Vue from 'vue'
+
+    new Vue({
+      el: "#app",
+      template:'
+          <div>>
+            <h2>{{message}}</h2>
+          </div>
+      '
+      data: {
+        message: "hello vue",
+      },
+    });
+  </script>
+</body>
+```
+
+vue组件化的使用
+需要注意
+* 1,需要加载vue-loader vue-template-compiler,vue-loader的版本还有要求,超过14可能需要在安装一个plugin
+* 2,想要导入的时候不添加后缀,可以在webpack中配置extension:['.js','.vue'...]
+* 3,
+```js
+// main.js中
+import Vue from 'vue';
+import APP from './vue/App.vue'
+
+new Vue({
+  template:'<APP/>',
+  components:{
+    APP
+  }
+})
+
+//APP.vue
+<template>
+  <div class="">
+    <h2>
+      {{message}}
+    </h2>
+    <Cpn></Cpn>
+  </div>
+</template>
+
+<script type="text/javascript">
+import Cpn from './mathutil.vue'
+export default {
+  data() {
+    return {
+      message:"Hello Vue"
+    }
+  },
+  components: {
+    Cpn
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+</style>
+
+
+// mathutil.vue
+<template>
+  <div class="">
+    <h2>
+      {{message}}
+    </h2>
+  </div>
+</template>
+
+<script type="text/javascript">
+export default {
+  data() {
+    return {
+      message:'我是math'
+    }
+  },
+  components: {
+
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+</style>
+
+```
+### webpack插件的使用
+
+```js
+// 横幅插件BannnerPlugin
+// 在webpack.config.js文件中
+const webpack = require('webpack')
+exports = {
+  xxx,
+  xxx,
+  plugins:[
+    new webpack.BannnerPlugin('版权归tomtao所有')
+  ]
+}
 ```
