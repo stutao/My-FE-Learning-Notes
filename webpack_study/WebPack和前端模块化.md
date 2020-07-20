@@ -318,4 +318,25 @@ exports = {
     new webpack.BannnerPlugin('版权归tomtao所有')
   ]
 }
+
+// 打包html的plugin
+// HtmlWebpackPlugin
+// 会自动加入body 还有script
+// 需要自动生成div? 指定一个index.html作为模板就好
+  plugins:[
+    new webpack.HtmlWebpackPlugin({
+      template:'index.html'
+    })
+  ]
+
+// js压缩插件
+// uglifyjs-webpack-plugin
+// 不建议在开发的时候用,方便浏览器调试.
+plugins:[
+    new webpack.uglifyJsPlugin()
+  ]
 ```
+
+### webpack-dev-server搭建本地服务器
+要用的时候搜索引擎吧,主要是为了搭建一个临时开发服务器 不需要每次多build
+
