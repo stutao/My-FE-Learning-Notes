@@ -340,3 +340,6 @@ plugins:[
 ### webpack-dev-server搭建本地服务器
 要用的时候搜索引擎吧,主要是为了搭建一个临时开发服务器 不需要每次多build
 
+### webpackmerge 做生产环境和开发环境的配置合并
+需要在package.json里面的对应命令指定的config换一下,
+同时 需要指定dist生成的位置.
