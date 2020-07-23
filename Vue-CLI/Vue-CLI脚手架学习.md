@@ -71,3 +71,8 @@ template -> ast(抽象语法树)-> render函数->虚拟DOM->真实DOM
 vue文件中还是那样写,但是那个template最后会消失
 
 ```
+
+### vue ui
+```
+启动本地服务器
+```
