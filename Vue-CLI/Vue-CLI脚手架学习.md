@@ -272,3 +272,102 @@ new Vue({
 // 也可以在组件HTML代码中直接使用mustache语法
 // {{$route.params.userId}}
 ```
+
+### 路由的懒加载
+
+```js
+/*如果将所有js,css文件都打包到一个bundle里面,那么这个js文件会非常大,影响请求效率
+
+webpack打包的时候将js拆分成三个文件,
+  1,app相关内容的业务代码
+  2,manifest,底层支撑的代码
+  3,vendor,第三方插件代码
+*/
+//懒加载其实就是用到时再加载.
+//方式一:用的不多 但是需要了解,是使用了异步加载的方式
+const Home = resolve =>{require.ensure(['../comment/Home.vue'],()=>
+{resolve(require('./comment/Home.vue'))})}
+
+//方式二:AMD写法
+const Home = resolve => require(['./comment/Home.vue'],resolve)
+
+//方式三:
+const Home = ()=>import('../comment/Home')
+routers=[
+  {
+    path:'/home',
+    comment:Home
+  }
+]
+```
+
+### 路由的嵌套
+```js
+/*
+  场景
+    如 home/news 显示新闻
+       home/message 显示消息
+*/
+
+// 第一步 新建组件news,message
+// 就正常写法
+
+// 第二步:加入index.js中的home路由的children下
+ {
+  path: "/home",
+  name: "Home",
+  component: Home,
+  children: [
+    {
+      path:'',
+      redirect:'news'
+    },
+    {
+      path: "message",
+      component: HomeMessage
+    },
+    {
+      path: "news",
+      component: HomeNews
+    }
+  ]
+}
+
+// 第三步 显示,在Home.vue中添加内容
+<router-link to="/home/news">新闻</router-link>
+<router-link to="/home/message">消息</router-link>
+
+<router-view></router-view>
+```
+
+### 路由参数传递的方式
+
+```js
+// 方式1: 使用params的方式
+this.$route.params.paramsname // 获取
+// 使用v-bind绑定上去
+// <router-link :to="/home/news"+userid>新闻</router-link>
+
+// 方式2:使用query的方式
+// to 后面传递的是一个对象,会拼接到url上
+/*
+<router-link :to="{
+  path:'/home/news',
+  query:{
+    name:'zs',
+    age:18
+  }
+}">新闻</router-link>
+*/
+
+// 方式3 使用代码的方式
+this.$route.push({
+  path:'/home/news',
+  query:{
+    name:'zs',
+    age:18
+  }
+})
+this.$route.replace()
+
+```

@@ -1,35 +1,50 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Home from '@/components/Home'
-import About from '@/components/About'
-import User from '../components/User'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
+const Home = () => import("../components/Home.vue");
+const About = () => import("../components/About.vue");
+const User = () => import("../components/User.vue");
 
+const HomeMessage = () => import("../components/message.vue");
+const HomeNews = () => import("../components/News.vue");
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'index',
-      redirect: '/home'
+      path: "/",
+      name: "index",
+      redirect: "/home"
     },
     {
-      path: '/home',
-      name: 'Home',
-      component: Home
+      path: "/home",
+      name: "Home",
+      component: Home,
+      children: [
+        {
+          path:'',
+          redirect:'news'
+        },
+        {
+          path: "message",
+          component: HomeMessage
+        },
+        {
+          path: "news",
+          component: HomeNews
+        }
+      ]
     },
     {
-      path: '/about',
-      name: 'About',
+      path: "/about",
+      name: "About",
       component: About
     },
     {
-      path: '/user/:userId',
-      name: 'User',
+      path: "/user/:userId",
+      name: "User",
       component: User
     }
   ],
-  mode:'history',
-  linkActiveClass:'link-active'
-})
+  mode: "history",
+  linkActiveClass: "link-active"
+});
