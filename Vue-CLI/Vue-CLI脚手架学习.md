@@ -272,3 +272,69 @@ new Vue({
 // 也可以在组件HTML代码中直接使用mustache语法
 // {{$route.params.userId}}
 ```
+
+### 导航守卫
+* 主要目的:监听来回跳转的过程
+
+```js
+/*
+  知识点补充:
+    vue的生命周期函数
+    created() 在组件被创建的时候就调用
+    mounted() 在组件template被渲染挂载的dom上的时候
+    updated() 当界面被更新的时候
+*/
+
+// 需求  在每次页面更换之后改变title
+// 方式一: 使用created函数,不推荐
+
+// 方式2:使用router.beforEach方法
+// 函数中 to, from 都是Route类型 也就是我们对应的路由
+// 实现当前需求要在每个路由中加入meta:{title:'对应的名字'}
+// 在index.js中 添加beforeEach前置钩子,是在页面跳转前调用
+router.beforeEach(to,from,next) = >{
+  // 从from跳转到to
+  doucument.title = to.mateched[0].meta.title
+  // 必须要记得调用一下next方法 否则代码会有问题
+  next()
+}
+
+// 方式3,使用afterEach 后置钩子,在页面跳转后调用
+router.afterEach(to,from) = >{
+  // 从from跳转到to
+  doucument.title = to.mateched[0].meta.title
+  // 后置钩子不需要调用next()
+  // next()
+}
+
+/*
+  beforeEach,afterEach都是全局守卫
+  
+  路由独享守卫
+    在对应的路由中写
+  组件独享守卫
+    在对应组件内
+*/
+```
+
+### keep-alive内容
+```js
+/*
+  主要是浏览状态的保留
+
+  按照正常Vue的生命周期,当跳出当前组件的时候,会执行销毁动作
+    如果要他不销毁
+      采用keep-alive包裹住router-view的标签
+
+  第一步:keep-alive包裹router-alive 
+    这样可以就不会频繁的创建和销毁组件
+
+  第二步:使用beforeRouteLeave函数记录当前离开的path
+
+  知识点:只有在keep-alive包裹的组件才会有activated和deactivated的回调方法,主要含义是表示当前组件是否为激活状态.
+
+  // 如下可以将Proflie和User排除在keep-alive之外.注意不要加空格
+  在<keep-alive exclude='Profile,User'></keep-alive>
+*/
+
+```
