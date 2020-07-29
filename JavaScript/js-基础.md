@@ -1190,6 +1190,39 @@ promise.then(function(num){
 }).catch(function(){
     // reject之后执行的代码
 })
+
+// 链式调用
+new Promise(resolve,rejdect){
+    resolve(data)
+}.then(
+    data =>{
+    // 代码逻辑
+    console.log('嘎嘎嘎')
+    // return的三种方式
+    // 1.return new Promise((resolve)=>{})
+    // 2,return new Promise.resolve('data') 
+    // 如果需要调用出错就用reject 也可以用throw 直接抛出异常
+    // 3,return data
+    }
+
+).catch(
+
+)
+
+// promise的all方法
+Promise.all([
+    new Promise((resolve,reject)=>{
+        ajax1
+        resolve(data1)
+    }),
+    new Promise((resolve,reject)=>{
+        ajax2
+        resolve(data2)
+    }),
+]).then(result = >{
+    // result 是一个数组 对应前面的每个请求的resolve中的参数
+    result
+})
 ~~~
 
 ### Ajax同源策略-如何解决跨域问题?

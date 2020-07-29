@@ -10,6 +10,26 @@ const HomeMessage = () => import("../components/message.vue");
 const HomeNews = () => import("../components/News.vue");
 export default new Router({
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'index',
+    //   redirect: '/home'
+    // },
+    // {
+    //   path: '/home',
+    //   name: 'Home',
+    //   component: Home
+    // },
+    // {
+    //   path: '/about',
+    //   name: 'About',
+    //   component: About
+    // },
+    // {
+    //   path: '/user/:userId',
+    //   name: 'User',
+    //   component: User
+    // }
     {
       path: "/",
       name: "index",

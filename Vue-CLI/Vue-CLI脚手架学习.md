@@ -189,7 +189,10 @@ histor.replaceState()
 // router/index.js
 import Vue from 'vue'
 import Router from 'vue-router'
-// 这个@语法没看懂,实在不行就用../呗
+// 这个@别名是在webpack里面定义的一个resove默认是src,
+// 可以自己添加
+
+// 在html里面使用别名需要在自定义的路径名前加入一个~
 import Home from '@/components/Home'
 import About from '@/components/About'
 
