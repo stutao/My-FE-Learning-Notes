@@ -2,7 +2,7 @@
 * 简单的理解为组件之间的状态交互,共享
 ### 管理什么状态呢?
 * 多组件,跨组件共享数据的时候 比如说登录token,用户信息等
-
+### 如何使用?show demo code
 ### Vuex的核心概念
 
 ```
@@ -62,13 +62,25 @@ mutations
       但是不要进行异步操作,vuedevtools无法跟踪到.非要异步要增加一个actions环节来操作mutation
 
 actions
-
+  
   aupdate(context,payload){
     // 这个context是store对象
     异步操作方法(){
       context.commit('mutation中的方法')
     }
   }
+  // 函数还可以这么写
+  //aupdate({state,commit,rootState})
+  //这个写法是ES6对象的解构写法
+  const obj = {
+    name:'zs',
+    age:18,
+    height:188,
+    weight:89
+  }
+  // 是按照对应的key来取值的,不是按照顺序
+  const {name,height} = obj
+
 
   组件中使用:
     this.$store.dispatch('aupdate',params)
@@ -93,5 +105,28 @@ actions
       // 执行逻辑
     }
   )
+
 modules
+  单一状态树也是有限制的,在modules中可以定义对应的子模块
+  modules:{
+    a:{
+      state:{
+        name:'张三'
+      },
+      mutations:{
+        updateName(state){
+          state.name = 'xxx'
+        }
+      }
+      ...
+    }
+  }
+
+  // 获取方式
+  $store.state.modulename
+  // 组件修改模块中的modules中的内容也是直接commit,注意就是state中的内容不要重复
+
+  // 模块中的getters可以有第三个参数rootState 即代表的是他的父state
+
+  // modules中actions的commit只会提交到当前modules中的mutations
 ```
